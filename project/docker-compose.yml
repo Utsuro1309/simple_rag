@@ -1,0 +1,45 @@
+services:
+  weaviate:
+    image: semitechnologies/weaviate:1.23.0
+    command:
+      - --host
+      - 0.0.0.0
+      - --port
+      - '8080'
+      - --scheme
+      - http
+    environment:
+      OPENAI_APIKEY: ${OPENAI_API_KEY}
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      DEFAULT_VECTORIZER_MODULE: text2vec-openai
+      ENABLE_MODULES: text2vec-openai
+      PERSISTENCE_DATA_PATH: /var/lib/weaviate
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:8080/v1/.well-known/ready"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      WEAVIATE_URL: ${WEAVIATE_URL}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      # Đã bỏ TOGETHER_API_KEY, TOGETHER_MODEL
+      CHUNK_SIZE: ${CHUNK_SIZE}
+      CHUNK_OVERLAP: ${CHUNK_OVERLAP}
+    depends_on:
+      weaviate:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+
+volumes:
+  weaviate_data:

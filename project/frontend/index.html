@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Document QA System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>📄 Hỏi đáp tài liệu (RAG + PageIndex)</h1>
+    <div class="upload-section">
+        <h2>📚 Nhiều tài liệu nhỏ (RAG)</h2>
+        <input type="file" id="smallFiles" multiple accept=".pdf,.txt">
+        <button id="uploadSmall">Upload & Index</button>
+    </div>
+    <div class="upload-section">
+        <h2>📑 Một tài liệu lớn (Page Index)</h2>
+        <input type="file" id="largeFile" accept=".pdf">
+        <button id="uploadLarge">Upload & Index</button>
+    </div>
+    <hr>
+    <div class="query-section">
+        <h2>🔍 Đặt câu hỏi</h2>
+        <select id="methodSelect">
+            <option value="rag">RAG (nhiều tài liệu nhỏ)</option>
+            <option value="page_index">Page Index (tài liệu lớn)</option>
+        </select>
+        <div id="advice" class="advice"></div>
+        <input type="text" id="largeDocName" placeholder="Tên tài liệu lớn (VD: report.pdf)" style="display:none">
+        <textarea id="question" rows="3" placeholder="Nhập câu hỏi..."></textarea>
+        <button id="askBtn">Hỏi</button>
+        <div id="answer" class="answer"></div>
+    </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
